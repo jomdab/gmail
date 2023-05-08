@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _isSidebarOpen = false;
   String _selectedItem = 'Primary';
 
-   void _selectItem(String name) {
+  void _selectItem(String name) {
     setState(() {
       _selectedItem = name;
     });
@@ -145,43 +145,44 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20,4),
-              child: Text(
-                _selectedItem,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Colors.grey[600]
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 4),
+                child: Text(
+                  _selectedItem,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.grey[600]),
                 ),
               ),
-            ),
-            Expanded(
-              child: 
               ListView.builder(
                 padding: EdgeInsets.symmetric(vertical: 8),
                 itemCount: emails.length,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
                   Email email = emails[index];
-                  if(_selectedItem == "Starred" && !email.starred)
-                  {return const SizedBox.shrink();}
-                  else
-                  {return EmailCard(
-                    email: email,
-                    onTap: (email) {
-                      _onEmailTap(context, email);
-                    },
-                    onStarred: (email){
-                      _onStarred(email);
-                    },
-                  );}
+                  if (_selectedItem == "Starred" && !email.starred) {
+                    return const SizedBox.shrink();
+                  } else {
+                    return EmailCard(
+                      email: email,
+                      onTap: (email) {
+                        _onEmailTap(context, email);
+                      },
+                      onStarred: (email) {
+                        _onStarred(email);
+                      },
+                    );
+                  }
                 },
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -216,8 +217,8 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
         drawer: Drawer(
-        child: Sidebar(onSelectItem: _selectItem),
-      ),
+          child: Sidebar(onSelectItem: _selectItem),
+        ),
       ),
     );
   }
